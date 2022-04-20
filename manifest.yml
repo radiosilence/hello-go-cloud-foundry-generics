@@ -1,0 +1,7 @@
+applications:
+  - name: hello-go
+    random-route: true
+    memory: 64M
+    buildpack: https://github.com/cloudfoundry/go-buildpack#v1.9.42
+    # routes:
+    #   - route: jc-eb-hello-go.eu-gb.mybluemix.net
