@@ -11,24 +11,6 @@ type Number interface {
 	int64 | float64
 }
 
-// SumInts adds together the values of m.
-func SumInts(m map[string]int64) int64 {
-	var s int64
-	for _, v := range m {
-		s += v
-	}
-	return s
-}
-
-// SumFloats adds together the values of m.
-func SumFloats(m map[string]float64) float64 {
-	var s float64
-	for _, v := range m {
-		s += v
-	}
-	return s
-}
-
 // SumIntsOrFloats sums the values of map m. It supports both int64 and float64
 // as types for map values.
 func SumIntsOrFloats[K comparable, V Number](m map[K]V) V {
@@ -40,6 +22,15 @@ func SumIntsOrFloats[K comparable, V Number](m map[K]V) V {
 }
 
 func main() {
+
+	http.HandleFunc("/", HelloHandler)
+
+	fmt.Printf("Server started at port %s\n", os.Getenv("PORT"))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
+}
+
+func HelloHandler(w http.ResponseWriter, r *http.Request) {
+	r.Header.Set("content-type", "application/json")
 
 	// Initialize a map for the integer values
 	ints := map[string]int64{
@@ -53,21 +44,6 @@ func main() {
 		"second": 26.99,
 	}
 
-	fmt.Printf("Non-Generic Sums: %v and %v\n",
-		SumInts(ints),
-		SumFloats(floats))
-
-	fmt.Printf("Generic Sums: %v and %v\n",
-		SumIntsOrFloats(ints),
+	fmt.Fprintf(w, "AAAAAaaaaaAAARRGRGFGFGFGRGFe Generic Sums: %v and %v\n", SumIntsOrFloats(ints),
 		SumIntsOrFloats(floats))
-
-	http.HandleFunc("/", HelloHandler)
-
-	fmt.Printf("Server started at port %s\n", os.Getenv("PORT"))
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
-}
-
-func HelloHandler(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintf(w, "AAAAAaaaaaAAARRGRGFGFGFGRGFe 1.2\n")
 }
