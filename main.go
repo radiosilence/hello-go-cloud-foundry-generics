@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,8 +12,6 @@ type Number interface {
 	int64 | float64
 }
 
-// SumIntsOrFloats sums the values of map m. It supports both int64 and float64
-// as types for map values.
 func SumIntsOrFloats[K comparable, V Number](m map[K]V) V {
 	var s V
 	for _, v := range m {
@@ -22,28 +21,38 @@ func SumIntsOrFloats[K comparable, V Number](m map[K]V) V {
 }
 
 func main() {
-
-	http.HandleFunc("/", HelloHandler)
-
 	fmt.Printf("Server started at port %s\n", os.Getenv("PORT"))
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
 
-func HelloHandler(w http.ResponseWriter, r *http.Request) {
-	r.Header.Set("content-type", "application/json")
+type Response struct {
+	Ints   int64
+	Floats float64
+}
 
-	// Initialize a map for the integer values
+func HelloHandler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	w.Header().Add("content-type", "application/json")
+
 	ints := map[string]int64{
 		"first":  34,
 		"second": 12,
 	}
 
-	// Initialize a map for the float values
 	floats := map[string]float64{
 		"first":  35.98,
 		"second": 26.99,
 	}
 
-	fmt.Fprintf(w, "Generic Sums: %v and %v\n", SumIntsOrFloats(ints),
-		SumIntsOrFloats(floats))
+	sums := Response{
+		Ints:   SumIntsOrFloats(ints),
+		Floats: SumIntsOrFloats(floats),
+	}
+
+	if res, err := json.Marshal(&sums); err != nil {
+		panic(err)
+	} else {
+		w.Write(res)
+		w.Write([]byte("\n"))
+	}
 }
