@@ -21,6 +21,7 @@ func SumIntsOrFloats[K comparable, V Number](m map[K]V) V {
 }
 
 func main() {
+	http.HandleFunc("/", SumHandler)
 	fmt.Printf("Server started at port %s\n", os.Getenv("PORT"))
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 }
@@ -30,7 +31,7 @@ type Response struct {
 	Floats float64
 }
 
-func HelloHandler(w http.ResponseWriter, r *http.Request) {
+func SumHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	w.Header().Add("content-type", "application/json")
 
