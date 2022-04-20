@@ -1,7 +1,5 @@
 applications:
-  - name: hello-go
+  - name: hello-go-cloud-foundry-generics
     random-route: true
     memory: 64M
     buildpack: https://github.com/radiosilence/go-buildpack#develop
-    # routes:
-    #   - route: jc-eb-hello-go.eu-gb.mybluemix.net

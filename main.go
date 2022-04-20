@@ -44,6 +44,6 @@ func HelloHandler(w http.ResponseWriter, r *http.Request) {
 		"second": 26.99,
 	}
 
-	fmt.Fprintf(w, "AAAAAaaaaaAAARRGRGFGFGFGRGFe Generic Sums: %v and %v\n", SumIntsOrFloats(ints),
+	fmt.Fprintf(w, "Generic Sums: %v and %v\n", SumIntsOrFloats(ints),
 		SumIntsOrFloats(floats))
 }
